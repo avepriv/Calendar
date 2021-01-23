@@ -209,9 +209,9 @@ namespace Calendar
         }
 
         // minimize on ESC
-        private void Grid_KeyDown(Object sender, KeyEventArgs e)
+        private void Window_KeyDown(Object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Escape) {
+            if(e.Key == Key.Escape) {
                 e.Handled = true;
                 this.WindowState = WindowState.Minimized;
             }

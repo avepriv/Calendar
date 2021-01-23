@@ -5,9 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Calendar"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" Loaded="Window_Loaded">
+        Title="MainWindow" Height="450" Width="800" Loaded="Window_Loaded" KeyDown="Window_KeyDown">
     <Border BorderThickness="2">
-        <Grid KeyDown="Grid_KeyDown">
+        <Grid >
             <Grid.RowDefinitions />
             <Grid.ColumnDefinitions />
         </Grid>

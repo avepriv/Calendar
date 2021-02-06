@@ -14,6 +14,10 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Globalization;
+using System.IO;
+using System.Windows.Markup;
+using System.Xml;
+using System.Text;
 
 namespace Calendar
 {
@@ -24,7 +28,9 @@ namespace Calendar
     {
 
         Grid mainGrid;
-        Brush borderBrush = Brushes.Black;
+        Brush borderBrush = Brushes.DarkGray;
+        Brush holidayBrush = new SolidColorBrush(Color.FromArgb(255, 255, 255, 150));
+        Brush holidayFont = new SolidColorBrush(Color.FromArgb(255, 200, 0, 0));
         FontFamily verdana = new FontFamily("Arial");
         Thickness lpadd = new Thickness(3, 0, 0, 0);
         Thickness rpadd = new Thickness(0, 0, 3, 0);
@@ -49,7 +55,7 @@ namespace Calendar
             Border outerBorder = Content as Border;
             outerBorder.Margin = new Thickness(5);
             outerBorder.BorderThickness = new Thickness(2, 2, 2, 2);
-            outerBorder.BorderBrush = Brushes.Black;
+            outerBorder.BorderBrush = Brushes.DarkGray;
 
             // get the main-grid in its border
             mainGrid = outerBorder.Child as Grid;
@@ -105,7 +111,7 @@ namespace Calendar
                     BorderThickness = thinBorder,
                     Margin = thinMargin,
                     BorderBrush = borderBrush,
-                    Background = freeDay ? Brushes.Yellow : Brushes.Transparent
+                    Background = freeDay ? holidayBrush : Brushes.Transparent
                 };
                 brd.Child = new TextBlock() {
                     Text = $"{day:ddd} {day.Day}",
@@ -115,7 +121,7 @@ namespace Calendar
 
                     FontWeight = FontWeights.Bold,
                     FontSize = 12,
-                    Foreground = freeDay ? Brushes.Red : Brushes.Black
+                    Foreground = freeDay ? holidayFont : Brushes.Black
                 };
 
                 Grid.SetColumn(brd, column);
@@ -150,7 +156,7 @@ namespace Calendar
                         VerticalAlignment = VerticalAlignment.Bottom,
                         Background = Brushes.Transparent,
                         FontFamily = verdana,
-                        Foreground = Brushes.Red,
+                        Foreground = holidayFont,
                         FontSize = 9,
                         FontWeight = FontWeights.Normal
                     };
@@ -168,7 +174,7 @@ namespace Calendar
                             BorderThickness = thinBorder,
                             Margin = thinMargin,
                             BorderBrush = borderBrush,
-                            Background = freeDay ? Brushes.Yellow : Brushes.Transparent
+                            Background = Brushes.Transparent
                         };
                         Grid.SetColumn(empty_brd, column);
                         Grid.SetRow(empty_brd, fill_row);
@@ -189,6 +195,8 @@ namespace Calendar
                 marker.Effect = new DropShadowEffect() { Color = new Color { A = 255, R = 200, G = 200, B = 250 }, Direction = 320, Opacity = 1 };
                 mainGrid.Children.Add(marker);
             }
+
+            // SaveCalendar();
         }
 
         /// <summary>
@@ -215,6 +223,19 @@ namespace Calendar
                 e.Handled = true;
                 this.WindowState = WindowState.Minimized;
             }
+        }
+
+        private void SaveCalendar()
+        {
+            XmlWriterSettings settings = new XmlWriterSettings() {
+                Indent = true,
+                IndentChars = "  ",
+                OmitXmlDeclaration = true,
+                CloseOutput = true
+            };
+            XmlWriter writer = XmlWriter.Create(@"c:\users\admin\desktop\cal.xaml", settings);
+            XamlWriter.Save(Content, writer);
+            writer.Close();
         }
     }
 
